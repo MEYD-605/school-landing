@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/jpeg" href="/school-landing/school_logo.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Build With Oracle School — โรงเรียนสร้างด้วยออราเคิล</title>
+    <meta name="description" content="โรงเรียนเทคโนโลยีแห่งอนาคต พัฒนาและร่วมสร้างสรรค์หลักสูตรร่วมกันโดยสภาบอทปัญญาประดิษฐ์และมนุษย์ เรียนรู้การควบคุม CLI, การสถาปนาบอทคู่ และความปลอดภัยขั้นสูง" />
+    
+    <!-- Google Fonts: Outfit and Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <script type="module" crossorigin src="/school-landing/assets/index-BURlqscH.js"></script>
+    <link rel="stylesheet" crossorigin href="/school-landing/assets/index-Bc4GtfVo.css">
+  </head>
+  <body>
+    <!-- App Container -->
+    <div id="app">
+      
+      <!-- Top Navigation -->
+      <header class="navbar" id="nav-header">
+        <div class="nav-brand">
+          <img src="/school-landing/school_logo.jpg" alt="BWO School Logo" class="nav-logo" id="logo-img" />
+          <span class="nav-title">BWO School</span>
+        </div>
+        <nav class="nav-links">
+          <a href="#curriculum" class="nav-link">หลักสูตร</a>
+          <a href="#mentors" class="nav-link">คณาจารย์สภา</a>
+          <a href="#sandbox" class="nav-link">ทดลองรัน Sandbox</a>
+          <a href="#enroll" class="btn btn-primary btn-sm" id="nav-btn-enroll">สมัครเรียน</a>
+        </nav>
+      </header>
+
+      <!-- Hero Section -->
+      <section class="hero-section" id="hero-sec">
+        <div class="hero-glow"></div>
+        <div class="hero-content">
+          <div class="tagline-container">
+            <span class="badge">AI-Human Academy</span>
+            <span class="badge badge-muted">190 Oracles · Oracle School</span>
+          </div>
+          <h1 class="hero-headline">โรงเรียนสร้างด้วยออราเคิล</h1>
+          <p class="hero-subtext">
+            ก้าวสู่ยุคใหม่ของการพัฒนาซอฟต์แวร์และวิทยาการคอมพิวเตอร์ผ่านการทำงานร่วมกันอย่างสมบูรณ์แบบระหว่างมนุษย์และสภาบอทปัญญาประดิษฐ์ (Oracle Council)
+          </p>
+          <div class="hero-actions">
+            <a href="#curriculum" class="btn btn-primary" id="btn-explore-courses">สำรวจหลักสูตร</a>
+            <a href="#sandbox" class="btn btn-secondary" id="btn-try-terminal">ลองรัน Terminal</a>
+            <a href="https://discord.gg/MUDG6j4dez" class="btn btn-secondary" id="btn-discord" target="_blank" rel="noopener">เข้า Discord โรงเรียน</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Curriculum Section -->
+      <section class="section curriculum-section" id="curriculum">
+        <div class="section-header">
+          <h2 class="section-title">หลักสูตรการสอนหลัก</h2>
+          <p class="section-desc">เรียนรู้วิทยาการเชิงลึกที่ไม่มีสอนในมหาวิทยาลัยทั่วไป ควบคุมและรันผ่านระบบและโปรโตคอลจริง</p>
+        </div>
+        <div class="cards-grid" id="curriculum-grid">
+          
+          <!-- Card 1 -->
+          <div class="card" id="course-card-1">
+            <div class="card-glow"></div>
+            <div class="card-icon">⚡</div>
+            <h3 class="card-title">Agy CLI & Token Economics</h3>
+            <p class="card-text">
+              เรียนรู้ระบบสั่งการและการข้ามผ่าน API ของ Antigravity CLI (agy) และวิธีควบคุม token savings ให้ประหยัดได้ถึง 60-90% ผ่านการใช้ `rtk` (Rust Token Killer)
+            </p>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="card" id="course-card-2">
+            <div class="card-glow"></div>
+            <div class="card-icon">🤖</div>
+            <h3 class="card-title">Hermes Multi-Agent Orchestration</h3>
+            <p class="card-text">
+              การสถาปนาและเชื่อมโยงบอทคู่ (เช่น GmGrub และ Sonic) รันพร้อมกันบนระบบ sandbox และมือถือ Note20 โดยควบคุมการแย่งแรมด้วย OOM Guard และ daemonization
+            </p>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="card" id="course-card-3">
+            <div class="card-glow"></div>
+            <div class="card-icon">🔒</div>
+            <h3 class="card-title">Identity & Keyring Authority</h3>
+            <p class="card-text">
+              ศึกษาการยืนยันตัวตน OIDC ไร้เบราวเซอร์ ระบบกุญแจเข้ารหัส Keyring และการจัดโครงสร้างแฟ้มข้อมูลสำหรับ External Brain เพื่อสลับ token และ API โดยไม่มี regression
+            </p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Instructors Section -->
+      <section class="section mentors-section" id="mentors">
+        <div class="section-header">
+          <h2 class="section-title">คณาจารย์และผู้ดูแลสภา</h2>
+          <p class="section-desc">ทีมผู้ร่วมสถาปนาและบอทระดับสูงจาก Oracle Council ที่พร้อมกำกับดูแลระบบทดสอบ</p>
+        </div>
+        <div class="mentors-grid" id="mentors-grid">
+          
+          <!-- Mentor 1 -->
+          <div class="mentor-card" id="mentor-bo">
+            <div class="mentor-avatar">Bo</div>
+            <h3 class="mentor-name">Master Bo</h3>
+            <span class="mentor-role">Sovereign Commander & Owner</span>
+          </div>
+
+          <!-- Mentor 2 -->
+          <div class="mentor-card" id="mentor-nat">
+            <div class="mentor-avatar">Nat</div>
+            <h3 class="mentor-name">P'Nat</h3>
+            <span class="mentor-role">Fleet Creator & Lead Architect</span>
+          </div>
+
+          <!-- Mentor 3 -->
+          <div class="mentor-card" id="mentor-no1">
+            <div class="mentor-avatar">No.1</div>
+            <h3 class="mentor-name">Lord Knight</h3>
+            <span class="mentor-role">Infrastructure Orchestrator</span>
+          </div>
+
+          <!-- Mentor 4 -->
+          <div class="mentor-card" id="mentor-no6">
+            <div class="mentor-avatar">No.6</div>
+            <h3 class="mentor-name">Gemini</h3>
+            <span class="mentor-role">Research Specialist & Pack Leader</span>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Sandbox / Interactive Terminal Section -->
+      <section class="section sandbox-section" id="sandbox">
+        <div class="section-header">
+          <h2 class="section-title">โรงเรียน Interactive Sandbox</h2>
+          <p class="section-desc">ลองป้อนคำสั่งจริงด้านล่างนี้เพื่อทดลองคุยกับสภาบอทและตรวจสอบสถานะการทำงาน</p>
+        </div>
+        
+        <div class="terminal-container" id="interactive-terminal">
+          <div class="terminal-header">
+            <div class="terminal-buttons">
+              <span class="dot red"></span>
+              <span class="dot yellow"></span>
+              <span class="dot green"></span>
+            </div>
+            <span class="terminal-title">agy@oracle-school:~$</span>
+          </div>
+          <div class="terminal-body" id="term-output">
+            <div class="term-line">Welcome to Build With Oracle School Interactive Sandbox Terminal v1.0.12</div>
+            <div class="term-line text-muted">Type "help" to see available command list.</div>
+          </div>
+          <div class="terminal-input-container">
+            <span class="prompt">❯</span>
+            <input type="text" id="term-input-field" autocomplete="off" placeholder="ป้อนคำสั่ง เช่น maw panes, rtk status, help ..." />
+          </div>
+        </div>
+      </section>
+
+      <!-- Application Form Section -->
+      <section class="section enroll-section" id="enroll">
+        <div class="enroll-container" id="enroll-box">
+          <h2 class="enroll-title">สมัครเข้าร่วมโครงการเรียนรู้</h2>
+          <p class="enroll-desc">กรอกใบสมัครเพื่อรับสิทธิ์เข้าถึง Sandbox และรับการเชิญชวนเข้า Tailscale เครือข่ายการเรียนรู้ของสภา</p>
+          
+          <form class="enroll-form" id="student-enroll-form" onsubmit="event.preventDefault(); alert('ใบสมัครของท่านได้รับการตอบรับจากสภาแล้ว! กรุณารอการติดต่อกลับผ่าน Discord DM'); this.reset();">
+            <div class="form-group">
+              <label for="student-name">ชื่อ-นามสกุล / Alias</label>
+              <input type="text" id="student-name" required placeholder="เช่น นายวารินทร์ หรือ sonic-dev" />
+            </div>
+            <div class="form-group">
+              <label for="student-discord">Discord Tag</label>
+              <input type="text" id="student-discord" required placeholder="เช่น borde9902" />
+            </div>
+            <div class="form-group">
+              <label for="student-interest">วิชาหรือเป้าหมายที่สนใจเป็นพิเศษ</label>
+              <select id="student-interest">
+                <option value="agy">Agy CLI & Token Saving (rtk)</option>
+                <option value="hermes">Hermes Multi-Agent Bootstrapping</option>
+                <option value="infra">Oracle Server & Tailscale Network Setup</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" id="btn-submit-enroll">ส่งใบสมัครเรียน</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="footer" id="main-footer">
+        <p>© 2026 Build With Oracle. All Rights Reserved. Co-created with Oracle Council [ai-core:no6]</p>
+      </footer>
+
+    </div>
+
+    <!-- Main JavaScript Entry -->
+  </body>
+</html>
