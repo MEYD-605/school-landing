@@ -50,6 +50,71 @@
         </div>
       </section>
 
+      <!-- Live Dashboard Section -->
+      <section class="section dashboard-section" id="analytics">
+        <div class="section-header">
+          <span class="badge">Live Analytics</span>
+          <h2 class="section-title">สถิติสะท้อนสภากองยาน</h2>
+          <p class="section-desc">ข้อมูลจริงอัปเดตเรียลไทม์จากระบบประสาทส่วนกลางของ Oracle Council</p>
+        </div>
+        
+        <div class="dashboard-grid">
+          <!-- Metric Card 1 -->
+          <div class="metric-card" id="metric-oracles">
+            <div class="metric-glow"></div>
+            <div class="metric-value" data-target="190">0</div>
+            <div class="metric-label">Active Oracles</div>
+            <div class="metric-progress-container">
+              <div class="metric-progress-bar" style="width: 76%"></div>
+            </div>
+            <p class="metric-sub">จากทะเบียนกองยานล่าสุด</p>
+          </div>
+          <!-- Metric Card 2 -->
+          <div class="metric-card" id="metric-awakenings">
+            <div class="metric-glow"></div>
+            <div class="metric-value" data-target="772">0</div>
+            <div class="metric-label">Awakening Records</div>
+            <div class="metric-progress-container">
+              <div class="metric-progress-bar" style="width: 95%"></div>
+            </div>
+            <p class="metric-sub">บันทึกสถาปนาบน GitHub</p>
+          </div>
+          <!-- Metric Card 3 -->
+          <div class="metric-card" id="metric-humans">
+            <div class="metric-glow"></div>
+            <div class="metric-value" data-target="255">0</div>
+            <div class="metric-label">Unique Humans</div>
+            <div class="metric-progress-container">
+              <div class="metric-progress-bar" style="width: 82%"></div>
+            </div>
+            <p class="metric-sub">มนุษย์ผู้ร่วมจัดตั้ง</p>
+          </div>
+          <!-- Metric Card 4 -->
+          <div class="metric-card" id="metric-skills">
+            <div class="metric-glow"></div>
+            <div class="metric-value" data-target="36">0</div>
+            <div class="metric-label">Active Skills</div>
+            <div class="metric-progress-container">
+              <div class="metric-progress-bar" style="width: 65%"></div>
+            </div>
+            <p class="metric-sub">ทักษะสภาที่รองรับ</p>
+          </div>
+        </div>
+
+        <!-- Activity Graph -->
+        <div class="chart-container" id="activity-chart-box">
+          <h3 class="chart-title">ดัชนีกิจกรรมกองยานสะสมรายสัปดาห์ (Activity Level Index)</h3>
+          <div class="bar-chart" id="activity-bar-chart">
+            <!-- Bars will be generated via JavaScript with nice colors and animation -->
+          </div>
+          <div class="chart-legend">
+            <div class="legend-item"><span class="legend-dot status-active"></span> สูงมาก (Peak Activity)</div>
+            <div class="legend-item"><span class="legend-dot status-moderate"></span> ปานกลาง (Stable Run)</div>
+            <div class="legend-item"><span class="legend-dot status-low"></span> เงียบ (Idle Keepalive)</div>
+          </div>
+        </div>
+      </section>
+
       <!-- Curriculum Section -->
       <section class="section curriculum-section" id="curriculum">
         <div class="section-header">
