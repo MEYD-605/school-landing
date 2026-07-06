@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/jpeg" href="/school_logo.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Context Export | BWO School x Hermes</title>
+    <meta name="description" content="หน้าประมวลกรอบคำถามสำหรับคัดลอกข้อมูลการเรียนรู้ของนักเรียนเพื่อย้ายและติดตั้งเข้าหน่วยความจำ Hermes Agent Memory" />
+    
+    <!-- Google Fonts: Outfit and Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet" />
+
+    <style>
+      :root {
+        --bg-color: oklch(7% 0.006 95);
+        --bg-darker: oklch(4% 0.004 95);
+        --card-bg: rgba(255, 255, 255, 0.01);
+        --border-color: rgba(255, 255, 255, 0.08);
+        --border-glow: rgba(212, 175, 55, 0.15);
+        
+        --text-primary: #f3f4f6;
+        --text-muted: #9ca3af;
+        
+        --accent-gold: #D4AF37;
+        --accent-violet: #8B5CF6;
+        --accent-red: #EF4444;
+        --accent-green: #10B981;
+        
+        --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        --font-family-title: 'Outfit', sans-serif;
+        --font-family-body: 'Inter', sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background-color: var(--bg-color);
+        color: var(--text-primary);
+        font-family: var(--font-family-body);
+        line-height: 1.65;
+        padding-bottom: 4rem;
+        background-image: 
+          radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.04), transparent 40%),
+          radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.04), transparent 40%);
+      }
+
+      main {
+        width: min(900px, 92vw);
+        margin: 0 auto;
+        padding: 2.5rem 0;
+      }
+
+      /* Navbar style */
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.25rem 0;
+        border-bottom: 1px solid var(--border-color);
+        margin-bottom: 2.5rem;
+      }
+
+      .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        text-decoration: none;
+      }
+
+      .nav-logo {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 1px solid var(--accent-gold);
+      }
+
+      .nav-title {
+        font-family: var(--font-family-title);
+        font-weight: 700;
+        font-size: 1.2rem;
+        color: var(--text-primary);
+      }
+
+      .nav-back-link {
+        font-size: 0.9rem;
+        color: var(--accent-gold);
+        text-decoration: none;
+        font-weight: 500;
+        transition: var(--transition-smooth);
+      }
+
+      .nav-back-link:hover {
+        color: #fff;
+        text-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
+      }
+
+      /* Hero Section */
+      .hero {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        padding: 2.5rem;
+        margin-bottom: 1.5rem;
+        position: relative;
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+      }
+
+      .hero-glow {
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(212, 175, 55, 0.02) 0%, transparent 60%);
+        pointer-events: none;
+      }
+
+      .eyebrow {
+        color: var(--accent-gold);
+        font-weight: 700;
+        font-size: 0.75rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+      }
+
+      h1 {
+        font-family: var(--font-family-title);
+        font-size: clamp(1.8rem, 4vw, 2.5rem);
+        font-weight: 800;
+        line-height: 1.2;
+        margin-bottom: 0.75rem;
+        background: linear-gradient(135deg, #ffffff, var(--accent-gold));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      p {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-family-title);
+        font-weight: 600;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: var(--transition-smooth);
+        border: none;
+        outline: none;
+        text-decoration: none;
+      }
+
+      .btn-primary {
+        background: var(--accent-gold);
+        color: var(--bg-darker);
+        box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+      }
+
+      .btn-primary:hover {
+        background-color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
+      }
+
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--text-primary);
+        border: 1px solid var(--border-color);
+      }
+
+      .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: var(--accent-gold);
+        transform: translateY(-2px);
+      }
+
+      /* Info Grid */
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 1.5rem;
+        backdrop-filter: blur(10px);
+      }
+
+      .card h2 {
+        font-family: var(--font-family-title);
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        color: var(--accent-gold);
+      }
+
+      .card ul {
+        list-style-type: none;
+      }
+
+      .card li {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+        position: relative;
+        padding-left: 1.25rem;
+      }
+
+      .card li::before {
+        content: "•";
+        position: absolute;
+        left: 0;
+        color: var(--accent-gold);
+        font-weight: bold;
+      }
+
+      .card-warn {
+        border-color: rgba(239, 68, 68, 0.2);
+        background: rgba(239, 68, 68, 0.02);
+      }
+
+      .card-warn h2 {
+        color: var(--accent-red);
+      }
+
+      .card-warn li::before {
+        color: var(--accent-red);
+      }
+
+      /* Prompt Wrapper */
+      .prompt-wrap {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        backdrop-filter: blur(10px);
+      }
+
+      .prompt-wrap h2 {
+        font-family: var(--font-family-title);
+        font-size: 1.4rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--accent-gold);
+      }
+
+      .textarea-container {
+        position: relative;
+        margin-top: 1rem;
+      }
+
+      textarea {
+        width: 100%;
+        min-height: 520px;
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px dashed var(--border-color);
+        border-radius: 12px;
+        padding: 1.25rem;
+        color: #10B981; /* Green matrix style code */
+        font-family: monospace;
+        font-size: 0.88rem;
+        line-height: 1.6;
+        resize: vertical;
+        outline: none;
+        transition: var(--transition-smooth);
+      }
+
+      textarea:focus {
+        border-color: var(--accent-gold);
+        box-shadow: 0 0 15px rgba(212, 175, 55, 0.05);
+      }
+
+      /* OS Detect Notification */
+      .os-detect-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(139, 92, 246, 0.1);
+        color: var(--accent-violet);
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.25rem 0.75rem;
+        border-radius: 99px;
+        margin-bottom: 1rem;
+      }
+
+      /* Footer */
+      .footer {
+        text-align: center;
+        padding: 2.5rem 0;
+        border-top: 1px solid var(--border-color);
+        color: var(--text-muted);
+        font-size: 0.85rem;
+      }
+
+      @media (max-width: 768px) {
+        main {
+          padding: 1.5rem 0;
+        }
+        .hero {
+          padding: 1.5rem;
+        }
+        textarea {
+          min-height: 400px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <!-- Navigation Bar -->
+      <header class="navbar">
+        <a href="index.html" class="nav-brand">
+          <img src="/school_logo.jpg" alt="BWO School Logo" class="nav-logo" />
+          <span class="nav-title">BWO School</span>
+        </a>
+        <a href="index.html#enroll" class="nav-back-link">← กลับหน้าแรกโรงเรียน</a>
+      </header>
+
+      <!-- Hero Section -->
+      <section class="hero">
+        <div class="hero-glow"></div>
+        <div class="eyebrow">Student Profile Export</div>
+        <h1>คัดลอกข้อมูลประวัติการเรียนรู้<br>เตรียมย้ายเข้า Hermes Memory</h1>
+        <p>
+          หน้านี้ช่วยสร้างกรอบคำถาม (Prompt Template) ในการนำเข้าข้อมูลและเป้าหมายการประเมินทักษะ เพื่อให้ AI chatbot ของท่าน (ChatGPT / Claude / Gemini) สรุปและประมวลผลออกมาเป็นแฟ้มประวัติการเรียนรู้สำหรับป้อนเข้าฐานข้อมูลความจำของ Hermes Agent ต่อไป
+        </p>
+        <div class="actions">
+          <button class="btn btn-primary" onclick="copyPrompt()">คัดลอก Prompt</button>
+          <button class="btn btn-secondary" onclick="window.print()">พิมพ์หน้านี้ / บันทึก PDF</button>
+        </div>
+      </section>
+
+      <!-- Info Grid -->
+      <section class="grid">
+        <div class="card">
+          <h2>วิธีการใช้งาน</h2>
+          <ul>
+            <li>คลิกปุ่ม <strong>"คัดลอก Prompt"</strong> ด้านบนเพื่อบันทึกเทมเพลตคำถามลงคลิปบอร์ด</li>
+            <li>นำไปวาง (Paste) ใน Chatbot ตัวโปรดของท่าน (เช่น ChatGPT, Claude หรือ Gemini)</li>
+            <li>ตอบคำถามเกี่ยวกับเป้าหมายและสไตล์การเรียนทีละหมวดตามหัวข้อ</li>
+            <li>ให้ Chatbot ทำการประมวลผลและสรุปออกมาเป็นรูปแบบ Markdown หรือ PDF</li>
+            <li>นำไฟล์ประวัติที่ได้ส่งเข้าระบบหรือแจ้งทีมงานสภาเพื่อจัดส่งเข้า Hermes Agent ต่อไป</li>
+          </ul>
+        </div>
+        
+        <div class="card card-warn">
+          <h2>คำเตือนความปลอดภัย</h2>
+          <ul>
+            <li><strong>ห้ามกรอกข้อมูลลับเด็ดขาด:</strong> เช่น รหัสผ่าน, API Token, Private Key, เลขบัตรประชาชน, ข้อมูลบัตรเครดิต หรือความลับบริษัท</li>
+            <li>ประวัติในหน้านี้ควรเน้นเฉพาะ <strong>"ประวัติทักษะและแนวทางการเรียนรู้"</strong> เท่านั้น เพื่อให้ระบบประเมินผลการเรียนรู้ได้อย่างถูกต้อง</li>
+            <li>ตรวจสอบให้แน่ใจว่าไม่มีข้อความอ่อนไหวปนเข้าไปก่อนการบันทึก PDF</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Prompt Wrap Section -->
+      <section class="card prompt-wrap">
+        <h2>Copy-Paste Prompt</h2>
+        <div class="os-detect-badge" id="os-badge">กำลังตรวจหาระบบปฏิบัติการของท่าน...</div>
+        <p>เลือกคัดลอกเนื้อหาทั้งหมดในกรอบรหัสจำลองด้านล่างนี้:</p>
+        
+        <div class="textarea-container">
+          <textarea id="prompt-content" spellcheck="false" readonly>ฉันต้องการสร้างเอกสาร “Student Context/Profile Export” เพื่อบันทึกบริบทการเรียนรู้ของฉันเป็นไฟล์ Markdown สำหรับเตรียมนำเข้าและตั้งค่าความทรงจำของบอทคู่ Hermes Agent ภายหลัง
+
+โปรดดำเนินการตามขั้นตอนเหล่านี้:
+1. ถามคำถามฉันทีละข้อหรือทีละหมวดตามลำดับ ห้ามถามทุกข้อพร้อมกันเพื่อความสะดวกในการป้อนคำตอบ
+2. ห้ามขอข้อมูลลับ เช่น รหัสผ่าน, API key, token, private key, เลขบัตรประชาชน หรือข้อมูลทางการเงินใดๆ
+3. หากตรวจพบว่าฉันเผลอใส่ข้อมูลเสี่ยง ให้ทำการแจ้งเตือนและแนะนำให้ตัดออกทันที
+4. หลังจากตอบเสร็จสิ้น ให้ประมวลผลสรุปข้อมูลออกมาเป็นเอกสาร Markdown ที่สวยงาม
+
+กรุณาใช้โครงสร้างหัวข้อดังนี้:
+
+# Student Context/Profile Export (Hermes Migration Ready)
+
+## 1. ข้อมูลพื้นฐานผู้เรียน (Basic Profile)
+- ชื่อผู้เรียน / Alias:
+- ระบบปฏิบัติการหลักที่ใช้เรียน: {DET_OS}
+- เครื่องมือพัฒนาและ Terminal ที่ใช้งาน:
+- โซนเวลาโดยประมาณ (Timezone):
+
+## 2. เป้าหมายการเรียนรู้ (Learning Goals)
+- เป้าหมายระยะสั้นในวิชา BWO School:
+- เป้าหมายระยะยาวด้านปัญญาประดิษฐ์:
+- ความคาดหวังในการให้ AI สภาช่วยเหลือ:
+
+## 3. สไตล์การอธิบายและเรียนรู้ (Learning Style)
+- วิธีการสอนที่ชอบ (อธิบายทฤษฎี / เน้นตัวอย่างโค้ด / รันคอมมานไลน์):
+- โทนเสียงและการตอบสนองของบอทคู่ (จริงจัง / เป็นกันเอง / สั้นกระชับ):
+- สิ่งที่เรียนรู้ได้เร็วที่สุด:
+- ปัญหาที่ทำให้สับสนหรือติดขัดบ่อยครั้ง:
+
+## 4. โครงการและทักษะปัจจุบัน (Skills & Projects)
+- ทักษะการใช้ CLI / terminal ที่ใช้งานบ่อย:
+- ระบบฐานข้อมูลที่เคยจับ (SQLite, PostgreSQL, vector db, อื่นๆ):
+- โครงการที่กำลังพัฒนาหรือมีส่วนร่วม:
+
+## 5. การเตรียมความพร้อมกับระบบสภา (BWO Readiness)
+- ความคิดเห็นต่อ "กฎข้อ 6: ห้ามแกล้งเป็นมนุษย์":
+- การเชื่อมต่อเครือข่าย Tailscale (เรียบร้อย / ยังไม่ติดตั้ง):
+
+## 6. คำสั่งและรูปแบบ Hermes ที่แนะนำ (Suggested Notes)
+- ทักษะหรือคำสั่ง CLI ที่ต้องการให้บอทคู่อำนวยความสะดวก:
+- Preferences หรือ Config ที่สำคัญต่อระบบการเรียนรู้:
+
+---
+ท้ายเอกสารกรุณาระบุหัวข้อ “Do Not Include” เพื่อระบุรายการข้อมูลที่ไม่ควรนำมารวมในไฟล์นี้ และบอกวิธีการเซฟหรือสั่งพิมพ์สรุปนี้ออกเป็นเอกสาร PDF
+
+เริ่มถามคำถามหมวดที่ 1 ข้อมูลพื้นฐานผู้เรียนได้เลย</textarea>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <p>© 2026 Build With Oracle. Co-created with Oracle Council [ai-core:no6]</p>
+      </footer>
+    </main>
+
+    <script>
+      // OS Detection and prompt replacement
+      function detectOS() {
+        const userAgent = window.navigator.userAgent.toLowerCase();
+        let os = "macOS (Apple Silicon / Intel)";
+        let osName = "macOS";
+        
+        if (userAgent.indexOf("win") !== -1) {
+          os = "Windows 10 / 11";
+          osName = "Windows";
+        } else if (userAgent.indexOf("linux") !== -1) {
+          os = "Linux (Ubuntu / Debian / Arch)";
+          osName = "Linux";
+        } else if (userAgent.indexOf("android") !== -1 || userAgent.indexOf("iphone") !== -1 || userAgent.indexOf("ipad") !== -1) {
+          os = "Mobile OS (Android / iOS)";
+          osName = "Mobile";
+        }
+
+        const osBadge = document.getElementById("os-badge");
+        if (osBadge) {
+          osBadge.innerText = `● ระบบปฏิบัติการที่ตรวจพบ: ${os}`;
+        }
+
+        const textarea = document.getElementById("prompt-content");
+        if (textarea) {
+          textarea.value = textarea.value.replace("{DET_OS}", os);
+        }
+      }
+
+      // Copy Prompt function
+      async function copyPrompt() {
+        const textarea = document.getElementById("prompt-content");
+        if (textarea) {
+          textarea.select();
+          try {
+            await navigator.clipboard.writeText(textarea.value);
+            alert("คัดลอก Prompt ไปยังคลิปบอร์ดแล้ว! คุณสามารถนำไปวางใน ChatGPT/Claude เพื่อเตรียมโปรไฟล์ของคุณได้ทันที");
+          } catch (err) {
+            // Fallback for older browsers
+            document.execCommand("copy");
+            alert("คัดลอก Prompt แล้ว");
+          }
+        }
+      }
+
+      // Run detection on DOM load
+      document.addEventListener("DOMContentLoaded", detectOS);
+    </script>
+  </body>
+</html>
