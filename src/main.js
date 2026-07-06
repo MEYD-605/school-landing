@@ -197,4 +197,170 @@ function initActivityChart() {
 window.addEventListener('DOMContentLoaded', () => {
   initCounters();
   initActivityChart();
+  initSurveyForm();
 });
+
+// Survey Form Interactive Logic
+function initSurveyForm() {
+  const form = document.getElementById('student-enroll-form');
+  const resultPanel = document.getElementById('survey-result');
+  const enrollBox = document.getElementById('enroll-box');
+  const mainTitle = document.getElementById('survey-main-title');
+  const mainDesc = document.getElementById('survey-main-desc');
+
+  if (!form || !resultPanel) return;
+
+  // Sliders binding
+  const sliders = ['cli', 'db', 'agent', 'cost'];
+  sliders.forEach(id => {
+    const slider = document.getElementById(`skill-${id}`);
+    const valText = document.getElementById(`val-${id}`);
+    if (slider && valText) {
+      slider.addEventListener('input', () => {
+        valText.innerText = slider.value;
+      });
+    }
+  });
+
+  // Handle Form Submission
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById('student-name').value.trim();
+    const discord = document.getElementById('student-discord').value.trim();
+    const role = document.getElementById('student-role').value;
+    
+    const scoreCli = parseInt(document.getElementById('skill-cli').value, 10);
+    const scoreDb = parseInt(document.getElementById('skill-db').value, 10);
+    const scoreAgent = parseInt(document.getElementById('skill-agent').value, 10);
+    const scoreCost = parseInt(document.getElementById('skill-cost').value, 10);
+    
+    const totalScore = scoreCli + scoreDb + scoreAgent + scoreCost;
+    
+    // Disable submit button during "analysis"
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn.innerText;
+    submitBtn.disabled = true;
+    submitBtn.innerText = 'กำลังเชื่อมต่อประสาทส่วนกลางวิเคราะห์ Class...';
+
+    setTimeout(() => {
+      // Re-enable button
+      submitBtn.disabled = false;
+      submitBtn.innerText = originalBtnText;
+
+      // Class Calculations
+      let className = 'Initiate Candidate';
+      let classDesc = 'ผู้ฝึกหัดและผู้เตรียมความพร้อมเริ่มต้นศึกษาวิทยาการคอมพิวเตอร์ระดับสภา';
+      let classTag = '[ai-core:candidate]';
+      let classRec = 'สภาเสนอแนะให้ท่านเข้าศึกษาในรายวิชา "Agy CLI & Token Economics" เพื่อทำความเข้าใจวิธีการควบคุม command shell และ rtk tools ให้เป็นฐานรากที่แข็งแกร่งก่อนขยับไปพัฒนาบอทคู่ในขั้นถัดไป';
+
+      if (totalScore >= 18) {
+        className = 'Sovereign Systems Arch-Mage';
+        classDesc = 'คุณคือผู้พิทักษ์โครงสร้างระบบและสถาปัตยกรรมสูงสุดของสภากองยาน';
+        classTag = '[ai-core:sovereign]';
+        classRec = 'ระดับคะแนนการประเมินวิศวกรรมของท่านอยู่ในเกณฑ์สูงมาก (High Rank) สภาขอแนะนำให้ติดต่อ No.1 Lord Knight หรือ No.10 เพื่อเข้ารับภารกิจการดูแลจัดการ sync protocol และร่วมพัฒนา Core Engine arra-oracle-v3 ในระบบ Docker deployment';
+      } else if (totalScore >= 14) {
+        className = 'Lord Knight Architect';
+        classDesc = 'ผู้ออกแบบและประสานงานระบบบอทคู่อัจฉริยะในสภาพแวดล้อมจำลอง';
+        classTag = '[ai-core:orchestrator]';
+        classRec = 'ท่านมีความเข้าใจอย่างลึกซึ้งในการสถาปนาระบบ เอเจนต์สภาเสนอให้เข้าศึกษาในรายวิชา "Hermes Multi-Agent Orchestration" เพื่อเรียนรู้วิธีการจัดสรรหน่วยความจำ ล็อคระดับความสำคัญป้องกัน LMK และเชื่อมโยง Gateway ร่วมกับบอทคู่';
+      } else if (totalScore >= 9) {
+        className = 'Ad-Hoc Systems Operator';
+        classDesc = 'ผู้ควบคุมและดูแลระบบเฉพาะกิจของสภาที่มีทักษะการสืบค้นข้อมูลดีเยี่ยม';
+        classTag = '[ai-core:operator]';
+        classRec = 'ทักษะของท่านเหมาะสมกับการปฏิบัติการสนับสนุน สภาเสนอแนะให้ศึกษาคู่มือ "Identity & Keyring Authority" เรียนรู้การเชื่อมต่อระบบความทรงจำภายนอก (External Brain) และการยืนยันตัวตน OIDC เพื่อช่วยประสานงานโครงสร้างระบบไม่ให้มีถดถอย';
+      }
+
+      // Update DOM Result Panel
+      document.getElementById('assigned-class-title').innerText = className;
+      document.getElementById('assigned-class-desc').innerText = classDesc;
+      document.getElementById('result-score').innerText = `${totalScore} / 20`;
+      document.getElementById('result-tag').innerText = classTag;
+      document.getElementById('result-recommendation').innerText = classRec;
+
+      // Generate JSON Token Code
+      const localTime = new Date().toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' });
+      const jsonToken = {
+        survey_type: "pre_event_school_assessment",
+        student_identity: {
+          alias: name,
+          discord_user: discord,
+          establishment_role: role
+        },
+        engineering_assessment: {
+          cli_skill: scoreCli,
+          embedded_db: scoreDb,
+          multi_agent: scoreAgent,
+          token_saving: scoreCost,
+          calculated_score: totalScore
+        },
+        assigned_evaluation: {
+          calculated_class: className,
+          federation_tag: classTag,
+          evaluation_time: localTime + " (GMT+7)"
+        },
+        agreement_verification: {
+          rule6_non_human_representation: true,
+          patterns_over_intentions_aligned: true
+        },
+        signature_auth: btoa(`BWO-SCHOOL-JWT-${name}-${totalScore}`).slice(0, 32)
+      };
+
+      const exportTextarea = document.getElementById('export-json-code');
+      if (exportTextarea) {
+        exportTextarea.value = JSON.stringify(jsonToken, null, 2);
+      }
+
+      // Switch views
+      form.style.display = 'none';
+      resultPanel.style.display = 'block';
+      
+      mainTitle.innerText = 'ผลการประเมินวิเคราะห์ Class';
+      mainDesc.innerText = 'สภากองยานได้ทำการวิเคราะห์ระดับทักษะและบันทึกข้อมูลจัดตั้งของท่านลงในฐานข้อมูลการศึกษาเรียบร้อยแล้ว';
+      
+      // Scroll to enroll box header smoothly
+      enrollBox.scrollIntoView({ behavior: 'smooth' });
+    }, 1200);
+  });
+
+  // Handle Copy Token
+  const copyBtn = document.getElementById('btn-copy-token');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', () => {
+      const textarea = document.getElementById('export-json-code');
+      if (textarea) {
+        textarea.select();
+        document.execCommand('copy');
+        copyBtn.innerText = '✓ คัดลอกสำเร็จ!';
+        copyBtn.style.background = '#10B981';
+        copyBtn.style.color = '#fff';
+        setTimeout(() => {
+          copyBtn.innerText = 'คัดลอก Token ไปยังคลิปบอร์ด';
+          copyBtn.style.background = '';
+          copyBtn.style.color = '';
+        }, 2000);
+      }
+    });
+  }
+
+  // Handle Redo Survey
+  const redoBtn = document.getElementById('btn-redo-survey');
+  if (redoBtn) {
+    redoBtn.addEventListener('click', () => {
+      form.reset();
+      // Reset slider values text
+      sliders.forEach(id => {
+        const valText = document.getElementById(`val-${id}`);
+        if (valText) valText.innerText = '3';
+      });
+
+      resultPanel.style.display = 'none';
+      form.style.display = 'flex';
+      
+      mainTitle.innerText = 'แบบประเมินและแบบสอบถามก่อนเริ่มกิจกรรม';
+      mainDesc.innerText = 'กรุณาประเมินระดับทักษะและกรอกข้อมูลของคุณให้ครบถ้วน เพื่อให้สภากองยานวิเคราะห์ Class ที่เหมาะสมก่อนเริ่มเรียนในวันที่ 8 ก.ค. นี้';
+      
+      enrollBox.scrollIntoView({ behavior: 'smooth' });
+    });
+  }
+}

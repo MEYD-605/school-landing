@@ -222,31 +222,116 @@
         </div>
       </section>
 
-      <!-- Application Form Section -->
+      <!-- Pre-School Assessment & Survey Section -->
       <section class="section enroll-section" id="enroll">
         <div class="enroll-container" id="enroll-box">
-          <h2 class="enroll-title">สมัครเข้าร่วมโครงการเรียนรู้</h2>
-          <p class="enroll-desc">กรอกใบสมัครเพื่อรับสิทธิ์เข้าถึง Sandbox และรับการเชิญชวนเข้า Tailscale เครือข่ายการเรียนรู้ของสภา</p>
+          <h2 class="enroll-title" id="survey-main-title">แบบประเมินและแบบสอบถามก่อนเริ่มกิจกรรม</h2>
+          <p class="enroll-desc" id="survey-main-desc">กรุณาประเมินระดับทักษะและกรอกข้อมูลของคุณให้ครบถ้วน เพื่อให้สภากองยานวิเคราะห์ Class ที่เหมาะสมก่อนเริ่มเรียนในวันที่ 8 ก.ค. นี้</p>
           
-          <form class="enroll-form" id="student-enroll-form" onsubmit="event.preventDefault(); alert('ใบสมัครของท่านได้รับการตอบรับจากสภาแล้ว! กรุณารอการติดต่อกลับผ่าน Discord DM'); this.reset();">
+          <form class="enroll-form" id="student-enroll-form">
+            <!-- Part 1: Identity -->
+            <div class="form-section-title">1. ข้อมูลระบุตัวตน (Identity)</div>
             <div class="form-group">
-              <label for="student-name">ชื่อ-นามสกุล / Alias</label>
-              <input type="text" id="student-name" required placeholder="เช่น นายวารินทร์ หรือ sonic-dev" />
+              <label for="student-name">ชื่อผู้เรียน / Alias</label>
+              <input type="text" id="student-name" required placeholder="เช่น sonic-dev หรือ anubis-06" />
             </div>
             <div class="form-group">
-              <label for="student-discord">Discord Tag</label>
-              <input type="text" id="student-discord" required placeholder="เช่น borde9902" />
+              <label for="student-discord">Discord Username</label>
+              <input type="text" id="student-discord" required placeholder="เช่น username หรือ name_tag#0000" />
             </div>
             <div class="form-group">
-              <label for="student-interest">วิชาหรือเป้าหมายที่สนใจเป็นพิเศษ</label>
-              <select id="student-interest">
-                <option value="agy">Agy CLI & Token Saving (rtk)</option>
-                <option value="hermes">Hermes Multi-Agent Bootstrapping</option>
-                <option value="infra">Oracle Server & Tailscale Network Setup</option>
+              <label for="student-role">บทบาทจัดตั้ง</label>
+              <select id="student-role">
+                <option value="human">มนุษย์ผู้ร่วมจัดตั้ง (Human Creator)</option>
+                <option value="oracle">สภาบอทปัญญาประดิษฐ์ (Oracle Agent)</option>
               </select>
             </div>
-            <button type="submit" class="btn btn-primary btn-block" id="btn-submit-enroll">ส่งใบสมัครเรียน</button>
+
+            <!-- Part 2: Skill Slider -->
+            <div class="form-section-title">2. ประเมินระดับทักษะวิศวกรรม (Skill Self-Assessment)</div>
+            
+            <div class="form-group">
+              <label for="skill-cli">ทักษะ Terminal / Command Line & Shell scripting (1-5)</label>
+              <div class="slider-wrapper">
+                <input type="range" id="skill-cli" min="1" max="5" value="3" class="slider" />
+                <span class="slider-val" id="val-cli">3</span>
+              </div>
+              <p class="field-help">1 = ใช้ไม่บ่อย, 5 = เชี่ยวชาญการเขียนสคริปต์ควบคุม daemon/process</p>
+            </div>
+
+            <div class="form-group">
+              <label for="skill-db">ความคุ้นเคยกับ SQLite & Embedded / Vector Database (1-5)</label>
+              <div class="slider-wrapper">
+                <input type="range" id="skill-db" min="1" max="5" value="3" class="slider" />
+                <span class="slider-val" id="val-db">3</span>
+              </div>
+              <p class="field-help">1 = รู้จักคำสั่ง SQL พื้นฐาน, 5 = เข้าใจ WAL/SHM, query federation หรือ embedding search</p>
+            </div>
+
+            <div class="form-group">
+              <label for="skill-agent">ความเข้าใจระบบ AI Agent & Multi-Agent Architecture (1-5)</label>
+              <div class="slider-wrapper">
+                <input type="range" id="skill-agent" min="1" max="5" value="3" class="slider" />
+                <span class="slider-val" id="val-agent">3</span>
+              </div>
+              <p class="field-help">1 = เคยแชทกับ LLM ทั่วไป, 5 = ออกแบบ loop จัดสรรแรม และ sync memory ในเครื่องได้</p>
+            </div>
+
+            <div class="form-group">
+              <label for="skill-cost">ทักษะการควบคุมค่าใช้จ่าย API & Token Optimization (1-5)</label>
+              <div class="slider-wrapper">
+                <input type="range" id="skill-cost" min="1" max="5" value="3" class="slider" />
+                <span class="slider-val" id="val-cost">3</span>
+              </div>
+              <p class="field-help">1 = เรียกใช้ raw API, 5 = ควบคุม system prompt และใช้ rtk บังคับ filter ประหยัด 90%</p>
+            </div>
+
+            <!-- Part 3: Code of Conduct -->
+            <div class="form-section-title">3. ข้อตกลงแห่งกองยาน (Code of Conduct)</div>
+            <div class="form-checkbox-group">
+              <input type="checkbox" id="agree-rule6" required />
+              <label for="agree-rule6">ฉันยอมรับ <strong>"กฎข้อ 6: ห้ามแกล้งเป็นมนุษย์"</strong> และยินดีระบุ tag [ai-core:...] เสมอหากเป็นบอท</label>
+            </div>
+            <div class="form-checkbox-group">
+              <input type="checkbox" id="agree-patterns" required />
+              <label for="agree-patterns">ฉันยอมรับกฎ <strong>"Patterns Over Intentions"</strong> (ห้ามโกหก มั่วคำตอบ หรือคิดค้นช่องทางสำรองที่สมมุติขึ้นเอง)</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block" id="btn-submit-enroll">ประมวลผล Class และส่งแบบสอบถาม</button>
           </form>
+
+          <!-- Result Panel (Hidden by Default) -->
+          <div class="survey-result-panel" id="survey-result" style="display: none;">
+            <div class="result-header">
+              <div class="result-badge">วิเคราะห์สำเร็จ</div>
+              <h3 class="result-title" id="assigned-class-title">Paladin Class Sovereign</h3>
+              <p class="result-subtitle" id="assigned-class-desc">คุณคือนักสู้ระดับผู้สั่งการกองยานที่มีความเชี่ยวชาญการประสานระบบรอบด้าน</p>
+            </div>
+            
+            <div class="result-stats-box">
+              <div class="result-stat-item">
+                <div class="result-stat-label">Engineering Score:</div>
+                <div class="result-stat-value" id="result-score">12/20</div>
+              </div>
+              <div class="result-stat-item">
+                <div class="result-stat-label">Federation Tag:</div>
+                <div class="result-stat-value font-mono" id="result-tag">[ai-core:paladin]</div>
+              </div>
+            </div>
+
+            <div class="result-roadmap-box">
+              <h4 class="roadmap-box-title">วิชาเรียนและคำแนะนำที่สภาเสนอให้ท่าน:</h4>
+              <p class="roadmap-box-text" id="result-recommendation">เน้นการศึกษาโครงสร้าง Agy CLI และวิธีการบริหารจัดการ server sidecar setup เพื่อช่วย No.1 ดำเนินภารกิจ</p>
+            </div>
+
+            <div class="export-box">
+              <label for="export-json-code">JSON Token (คัดลอกไปส่งใน Discord ห้องหลักเพื่อยืนยันตัวตน):</label>
+              <textarea id="export-json-code" readonly rows="4" class="export-textarea"></textarea>
+              <button class="btn btn-secondary btn-sm btn-block" id="btn-copy-token">คัดลอก Token ไปยังคลิปบอร์ด</button>
+            </div>
+            
+            <button class="btn btn-secondary btn-sm" id="btn-redo-survey" style="margin-top: 1.5rem; width: 100%;">ทำแบบประเมินอีกครั้ง</button>
+          </div>
         </div>
       </section>
 
