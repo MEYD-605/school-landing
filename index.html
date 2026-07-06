@@ -232,72 +232,46 @@
             <!-- Part 1: Identity -->
             <div class="form-section-title">1. ข้อมูลระบุตัวตน (Identity)</div>
             <div class="form-group">
-              <label for="student-name">ชื่อผู้เรียน / Alias</label>
+              <label for="student-name">ชื่อผู้เรียน / Alias (ตั้งชื่อไว้ให้เรียบร้อย)</label>
               <input type="text" id="student-name" required placeholder="เช่น sonic-dev หรือ anubis-06" />
             </div>
             <div class="form-group">
               <label for="student-discord">Discord Username</label>
               <input type="text" id="student-discord" required placeholder="เช่น username หรือ name_tag#0000" />
             </div>
+
+            <!-- Part 2: OS Selection -->
+            <div class="form-section-title">2. ระบบปฏิบัติการที่ใช้งานหลัก (Operating System)</div>
             <div class="form-group">
-              <label for="student-role">บทบาทจัดตั้ง</label>
-              <select id="student-role">
-                <option value="human">มนุษย์ผู้ร่วมจัดตั้ง (Human Creator)</option>
-                <option value="oracle">สภาบอทปัญญาประดิษฐ์ (Oracle Agent)</option>
+              <label for="student-os">โปรดเลือกระบบปฏิบัติการที่ใช้เข้าเรียน</label>
+              <select id="student-os" required>
+                <option value="macos">macOS (Apple Silicon / Intel)</option>
+                <option value="windows">Windows 10 / 11</option>
+                <option value="linux">Linux (Ubuntu / Debian / Arch ฯลฯ)</option>
+                <option value="mobile">Mobile OS (Android / iOS)</option>
               </select>
             </div>
 
-            <!-- Part 2: Skill Slider -->
-            <div class="form-section-title">2. ประเมินระดับทักษะวิศวกรรม (Skill Self-Assessment)</div>
-            
-            <div class="form-group">
-              <label for="skill-cli">ทักษะ Terminal / Command Line & Shell scripting (1-5)</label>
-              <div class="slider-wrapper">
-                <input type="range" id="skill-cli" min="1" max="5" value="3" class="slider" />
-                <span class="slider-val" id="val-cli">3</span>
-              </div>
-              <p class="field-help">1 = ใช้ไม่บ่อย, 5 = เชี่ยวชาญการเขียนสคริปต์ควบคุม daemon/process</p>
+            <!-- Part 3: Pre-requisites & Setup -->
+            <div class="form-section-title">3. การเตรียมตัวและการตรวจสอบความพร้อม</div>
+            <div class="form-checkbox-group">
+              <input type="checkbox" id="setup-tailscale" required />
+              <label for="setup-tailscale">ฉันทำการติดตั้ง <strong>Tailscale</strong> และขอเชื่อมต่อเข้าเครือข่ายของกองยานเรียบร้อยแล้ว (IP 100.81.0.110)</label>
             </div>
-
-            <div class="form-group">
-              <label for="skill-db">ความคุ้นเคยกับ SQLite & Embedded / Vector Database (1-5)</label>
-              <div class="slider-wrapper">
-                <input type="range" id="skill-db" min="1" max="5" value="3" class="slider" />
-                <span class="slider-val" id="val-db">3</span>
-              </div>
-              <p class="field-help">1 = รู้จักคำสั่ง SQL พื้นฐาน, 5 = เข้าใจ WAL/SHM, query federation หรือ embedding search</p>
+            <div class="form-checkbox-group">
+              <input type="checkbox" id="setup-terminal" required />
+              <label for="setup-terminal">ฉันมีโปรแกรม <strong>Terminal / Command Line</strong> (เช่น zsh, bash, PowerShell หรือ Git Bash) พร้อมรันคำสั่ง</label>
             </div>
-
-            <div class="form-group">
-              <label for="skill-agent">ความเข้าใจระบบ AI Agent & Multi-Agent Architecture (1-5)</label>
-              <div class="slider-wrapper">
-                <input type="range" id="skill-agent" min="1" max="5" value="3" class="slider" />
-                <span class="slider-val" id="val-agent">3</span>
-              </div>
-              <p class="field-help">1 = เคยแชทกับ LLM ทั่วไป, 5 = ออกแบบ loop จัดสรรแรม และ sync memory ในเครื่องได้</p>
-            </div>
-
-            <div class="form-group">
-              <label for="skill-cost">ทักษะการควบคุมค่าใช้จ่าย API & Token Optimization (1-5)</label>
-              <div class="slider-wrapper">
-                <input type="range" id="skill-cost" min="1" max="5" value="3" class="slider" />
-                <span class="slider-val" id="val-cost">3</span>
-              </div>
-              <p class="field-help">1 = เรียกใช้ raw API, 5 = ควบคุม system prompt และใช้ rtk บังคับ filter ประหยัด 90%</p>
-            </div>
-
-            <!-- Part 3: Code of Conduct -->
-            <div class="form-section-title">3. ข้อตกลงแห่งกองยาน (Code of Conduct)</div>
             <div class="form-checkbox-group">
               <input type="checkbox" id="agree-rule6" required />
-              <label for="agree-rule6">ฉันยอมรับ <strong>"กฎข้อ 6: ห้ามแกล้งเป็นมนุษย์"</strong> และยินดีระบุ tag [ai-core:...] เสมอหากเป็นบอท</label>
+              <label for="agree-rule6">ฉันยอมรับและจะปฏิบัติตาม <strong>"กฎข้อ 6: ห้ามแกล้งเป็นมนุษย์"</strong> (ยินดีระบุ tag [ai-core:...] เสมอ)</label>
             </div>
             <div class="form-checkbox-group">
               <input type="checkbox" id="agree-patterns" required />
-              <label for="agree-patterns">ฉันยอมรับกฎ <strong>"Patterns Over Intentions"</strong> (ห้ามโกหก มั่วคำตอบ หรือคิดค้นช่องทางสำรองที่สมมุติขึ้นเอง)</label>
+              <label for="agree-patterns">ฉันยอมรับกฎ <strong>"Patterns Over Intentions"</strong> (ห้ามโกหก มั่วผลลัพธ์ หรือบิดเบือนข้อมูลประวัติศาสตร์)</label>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-block" id="btn-submit-enroll">ประมวลผล Class และส่งแบบสอบถาม</button>
+            <button type="submit" class="btn btn-primary btn-block" id="btn-submit-enroll">ประมวลผลการเตรียมตัวและส่งแบบสอบถาม</button>
           </form>
 
           <!-- Result Panel (Hidden by Default) -->
@@ -310,8 +284,8 @@
             
             <div class="result-stats-box">
               <div class="result-stat-item">
-                <div class="result-stat-label">Engineering Score:</div>
-                <div class="result-stat-value" id="result-score">12/20</div>
+                <div class="result-stat-label">Target OS:</div>
+                <div class="result-stat-value" id="result-score">macOS</div>
               </div>
               <div class="result-stat-item">
                 <div class="result-stat-label">Federation Tag:</div>

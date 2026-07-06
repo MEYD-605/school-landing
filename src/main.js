@@ -96,11 +96,6 @@ function appendLine(text, className = '') {
   termOutput.appendChild(line);
 }
 
-function appendMultiline(text) {
-  const lines = text.split('\n');
-  lines.forEach(l => appendLine(l));
-}
-
 // Global styles dynamic hover effect for cards
 document.querySelectorAll('.card, .mentor-card, .metric-card').forEach(card => {
   card.addEventListener('mousemove', (e) => {
@@ -193,12 +188,10 @@ function initActivityChart() {
   });
 }
 
-// Start animations on load
-window.addEventListener('DOMContentLoaded', () => {
-  initCounters();
-  initActivityChart();
-  initSurveyForm();
-});
+function appendMultiline(text) {
+  const lines = text.split('\n');
+  lines.forEach(l => appendLine(l));
+}
 
 // Survey Form Interactive Logic
 function initSurveyForm() {
@@ -210,100 +203,76 @@ function initSurveyForm() {
 
   if (!form || !resultPanel) return;
 
-  // Sliders binding
-  const sliders = ['cli', 'db', 'agent', 'cost'];
-  sliders.forEach(id => {
-    const slider = document.getElementById(`skill-${id}`);
-    const valText = document.getElementById(`val-${id}`);
-    if (slider && valText) {
-      slider.addEventListener('input', () => {
-        valText.innerText = slider.value;
-      });
-    }
-  });
-
   // Handle Form Submission
   form.addEventListener('submit', (e) => {
     e.preventDefault();
 
     const name = document.getElementById('student-name').value.trim();
     const discord = document.getElementById('student-discord').value.trim();
-    const role = document.getElementById('student-role').value;
-    
-    const scoreCli = parseInt(document.getElementById('skill-cli').value, 10);
-    const scoreDb = parseInt(document.getElementById('skill-db').value, 10);
-    const scoreAgent = parseInt(document.getElementById('skill-agent').value, 10);
-    const scoreCost = parseInt(document.getElementById('skill-cost').value, 10);
-    
-    const totalScore = scoreCli + scoreDb + scoreAgent + scoreCost;
+    const os = document.getElementById('student-os').value;
     
     // Disable submit button during "analysis"
     const submitBtn = form.querySelector('button[type="submit"]');
     const originalBtnText = submitBtn.innerText;
     submitBtn.disabled = true;
-    submitBtn.innerText = 'กำลังเชื่อมต่อประสาทส่วนกลางวิเคราะห์ Class...';
+    submitBtn.innerText = 'กำลังเชื่อมต่อประสาทส่วนกลางตรวจสอบความพร้อม...';
 
     setTimeout(() => {
       // Re-enable button
       submitBtn.disabled = false;
       submitBtn.innerText = originalBtnText;
 
-      // Class Calculations
-      let className = 'Initiate Candidate';
-      let classDesc = 'ผู้ฝึกหัดและผู้เตรียมความพร้อมเริ่มต้นศึกษาวิทยาการคอมพิวเตอร์ระดับสภา';
-      let classTag = '[ai-core:candidate]';
-      let classRec = 'สภาเสนอแนะให้ท่านเข้าศึกษาในรายวิชา "Agy CLI & Token Economics" เพื่อทำความเข้าใจวิธีการควบคุม command shell และ rtk tools ให้เป็นฐานรากที่แข็งแกร่งก่อนขยับไปพัฒนาบอทคู่ในขั้นถัดไป';
+      // OS-Based Calculations
+      let className = 'macOS Systems Specialist';
+      let classDesc = 'ผู้เรียนรู้สายระบบนิเวศ Unix ที่มีเครื่องมือและ terminal พร้อมรัน agy/rtk แบบ Native';
+      let classTag = '[ai-core:macos]';
+      let classRec = 'การเตรียมตัวขั้นถัดไป: ตรวจสอบให้แน่ใจว่าได้เพิ่ม /root/ (ผ่าน SSH) ลงใน static profiles และตั้งค่า SSH config บน macOS ให้เรียบร้อยเพื่อความสะดวกในการควบคุมบอทคู่ GMGrub/Sonic แบบรีโมทผ่าน CLI';
 
-      if (totalScore >= 18) {
-        className = 'Sovereign Systems Arch-Mage';
-        classDesc = 'คุณคือผู้พิทักษ์โครงสร้างระบบและสถาปัตยกรรมสูงสุดของสภากองยาน';
-        classTag = '[ai-core:sovereign]';
-        classRec = 'ระดับคะแนนการประเมินวิศวกรรมของท่านอยู่ในเกณฑ์สูงมาก (High Rank) สภาขอแนะนำให้ติดต่อ No.1 Lord Knight หรือ No.10 เพื่อเข้ารับภารกิจการดูแลจัดการ sync protocol และร่วมพัฒนา Core Engine arra-oracle-v3 ในระบบ Docker deployment';
-      } else if (totalScore >= 14) {
-        className = 'Lord Knight Architect';
-        classDesc = 'ผู้ออกแบบและประสานงานระบบบอทคู่อัจฉริยะในสภาพแวดล้อมจำลอง';
-        classTag = '[ai-core:orchestrator]';
-        classRec = 'ท่านมีความเข้าใจอย่างลึกซึ้งในการสถาปนาระบบ เอเจนต์สภาเสนอให้เข้าศึกษาในรายวิชา "Hermes Multi-Agent Orchestration" เพื่อเรียนรู้วิธีการจัดสรรหน่วยความจำ ล็อคระดับความสำคัญป้องกัน LMK และเชื่อมโยง Gateway ร่วมกับบอทคู่';
-      } else if (totalScore >= 9) {
-        className = 'Ad-Hoc Systems Operator';
-        classDesc = 'ผู้ควบคุมและดูแลระบบเฉพาะกิจของสภาที่มีทักษะการสืบค้นข้อมูลดีเยี่ยม';
-        classTag = '[ai-core:operator]';
-        classRec = 'ทักษะของท่านเหมาะสมกับการปฏิบัติการสนับสนุน สภาเสนอแนะให้ศึกษาคู่มือ "Identity & Keyring Authority" เรียนรู้การเชื่อมต่อระบบความทรงจำภายนอก (External Brain) และการยืนยันตัวตน OIDC เพื่อช่วยประสานงานโครงสร้างระบบไม่ให้มีถดถอย';
+      if (os === 'windows') {
+        className = 'Windows Systems Specialist';
+        classDesc = 'ผู้ใช้งานระบบปฏิบัติการ Windows ที่ต้องเตรียมพร้อมการรันข้ามระบบ';
+        classTag = '[ai-core:windows]';
+        classRec = 'การเตรียมตัวขั้นถัดไป: เนื่องจาก command syntax ของ bash shell มีข้อต่างจาก cmd.exe แนะนำอย่างยิ่งให้เปิดใช้ WSL2 (Windows Subsystem for Linux) หรือรันผ่าน Git Bash เสมอ เพื่อลด regression ในการรันคำสั่ง rtk';
+      } else if (os === 'linux') {
+        className = 'Linux Arch-Mage Operations';
+        classDesc = 'วิศวกรสายระบบที่เป็นหนึ่งเดียวกับสภาพแวดล้อม Docker-first deployment';
+        classTag = '[ai-core:linux]';
+        classRec = 'การเตรียมตัวขั้นถัดไป: สภาพแวดล้อมของท่านมีความสมบูรณ์สูงสุด แนะนำให้ตรวจสอบ keyring permissions และ daemon status ของ PM2 หรือ systemd เพื่อรองรับการสถาปนา process บอทคู่ในกิจกรรมจริง';
+      } else if (os === 'mobile') {
+        className = 'Hermes Mobile Operator';
+        classDesc = 'ผู้เชี่ยวชาญการ Bootstrap และดูแลระบบบอทพกพาในสมาร์ทโฟน';
+        classTag = '[ai-core:mobile]';
+        classRec = 'การเตรียมตัวขั้นถัดไป: ติดตั้ง Android Termux และขอรับ Hermes bootstrap package เพื่อใช้รันและล็อค RAM (oom_score_adj -1000) ของเอเจนต์ GMGrub/Sonic ป้องกัน LMK ปิดการออนไลน์';
       }
 
       // Update DOM Result Panel
       document.getElementById('assigned-class-title').innerText = className;
       document.getElementById('assigned-class-desc').innerText = classDesc;
-      document.getElementById('result-score').innerText = `${totalScore} / 20`;
+      document.getElementById('result-score').innerText = os.toUpperCase();
       document.getElementById('result-tag').innerText = classTag;
       document.getElementById('result-recommendation').innerText = classRec;
 
       // Generate JSON Token Code
       const localTime = new Date().toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' });
       const jsonToken = {
-        survey_type: "pre_event_school_assessment",
+        survey_type: "pre_event_readiness_assessment",
         student_identity: {
           alias: name,
-          discord_user: discord,
-          establishment_role: role
+          discord_user: discord
         },
-        engineering_assessment: {
-          cli_skill: scoreCli,
-          embedded_db: scoreDb,
-          multi_agent: scoreAgent,
-          token_saving: scoreCost,
-          calculated_score: totalScore
+        setup_assessment: {
+          target_os: os,
+          tailscale_connected: true,
+          terminal_ready: true,
+          rule6_aligned: true,
+          patterns_aligned: true
         },
         assigned_evaluation: {
           calculated_class: className,
           federation_tag: classTag,
           evaluation_time: localTime + " (GMT+7)"
         },
-        agreement_verification: {
-          rule6_non_human_representation: true,
-          patterns_over_intentions_aligned: true
-        },
-        signature_auth: btoa(`BWO-SCHOOL-JWT-${name}-${totalScore}`).slice(0, 32)
+        signature_auth: btoa(`BWO-SCHOOL-OS-${name}-${os}`).slice(0, 32)
       };
 
       const exportTextarea = document.getElementById('export-json-code');
@@ -315,8 +284,8 @@ function initSurveyForm() {
       form.style.display = 'none';
       resultPanel.style.display = 'block';
       
-      mainTitle.innerText = 'ผลการประเมินวิเคราะห์ Class';
-      mainDesc.innerText = 'สภากองยานได้ทำการวิเคราะห์ระดับทักษะและบันทึกข้อมูลจัดตั้งของท่านลงในฐานข้อมูลการศึกษาเรียบร้อยแล้ว';
+      mainTitle.innerText = 'ผลการประเมินการเตรียมตัว';
+      mainDesc.innerText = 'สภากองยานได้บันทึกเช็คลิสต์และข้อมูลจัดตั้งของท่านลงทะเบียนเรียนเรียบร้อยแล้ว';
       
       // Scroll to enroll box header smoothly
       enrollBox.scrollIntoView({ behavior: 'smooth' });
@@ -348,19 +317,20 @@ function initSurveyForm() {
   if (redoBtn) {
     redoBtn.addEventListener('click', () => {
       form.reset();
-      // Reset slider values text
-      sliders.forEach(id => {
-        const valText = document.getElementById(`val-${id}`);
-        if (valText) valText.innerText = '3';
-      });
-
       resultPanel.style.display = 'none';
       form.style.display = 'flex';
       
       mainTitle.innerText = 'แบบประเมินและแบบสอบถามก่อนเริ่มกิจกรรม';
-      mainDesc.innerText = 'กรุณาประเมินระดับทักษะและกรอกข้อมูลของคุณให้ครบถ้วน เพื่อให้สภากองยานวิเคราะห์ Class ที่เหมาะสมก่อนเริ่มเรียนในวันที่ 8 ก.ค. นี้';
+      mainDesc.innerText = 'กรุณากรอกข้อมูลของคุณให้ครบถ้วนเพื่อวิเคราะห์แนวทางเตรียมความพร้อมและลงทะเบียนการเข้าเรียนในวันที่ 8 ก.ค. นี้';
       
       enrollBox.scrollIntoView({ behavior: 'smooth' });
     });
   }
 }
+
+// Start animations on load
+window.addEventListener('DOMContentLoaded', () => {
+  initCounters();
+  initActivityChart();
+  initSurveyForm();
+});
