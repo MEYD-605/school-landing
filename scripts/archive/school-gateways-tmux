@@ -1,0 +1,26 @@
+#!/data/data/com.termux/files/usr/bin/bash
+# Persistent dual gateways via tmux + exec (fixes proot kill-on-exit)
+set -euo pipefail
+TERMUX_HOME="${TERMUX_HOME:-/data/data/com.termux/files/home}"
+HERMES_BIN="/root/hermes-venv/bin/hermes"
+STAGGER="${STAGGER:-25}"
+
+start_one() {
+  local session="$1" home="$2"
+  if tmux has-session -t "$session" 2>/dev/null; then
+    echo "OK: tmux $session already exists"
+    return 0
+  fi
+  echo "START: $session (HERMES_HOME=$home)"
+  
+  # Run tmux with clean exported environment variables loaded from .env
+  # Note: $HERMES_BIN is evaluated by Termux shell to pass the absolute path to proot
+  tmux new-session -d -s "$session" \
+    "proot-distro login debian -- bash -lc \"export HERMES_HOME=$home PATH=/root/hermes-venv/bin:\\\$PATH; set -a; [ -f \\\"\$HERMES_HOME/discord-state/.env\\\" ] && . \\\"\$HERMES_HOME/discord-state/.env\\\"; set +a; exec $HERMES_BIN gateway run --replace\""
+}
+
+command -v tmux >/dev/null || { echo "ERR: install tmux (pkg install tmux)" >&2; exit 1; }
+start_one 10-gmgrub "$TERMUX_HOME/.hermes-no101"
+sleep "$STAGGER"
+start_one school-sonic "$TERMUX_HOME/.hermes-sonic-t2"
+echo "tmux sessions:"; tmux ls

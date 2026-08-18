@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Agent & CLI metadata
+.metadata_never_index
+**/.metadata_never_index
+
