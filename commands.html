@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>maw new vs wake vs work — Command Reference</title>
+  <meta name="description" content="คู่มือเชิงเปรียบเทียบคำสั่งในการสร้าง tmux workspaces ของระบบ maw-rs CLI: maw new, wake และ work สำหรับการควบคุมบอทและการจัดการสิทธิ์ในเครือข่ายสภา">
+  <link rel="icon" type="image/jpeg" href="/school_logo.jpg" />
+  <style>
+    :root {
+      --ground: #0d1117;
+      --surface: #151b23;
+      --surface-raised: #1c2129;
+      --border: #2a313a;
+      --border-subtle: #21262d;
+      --text-primary: #c9d1d9;
+      --text-secondary: #8b949e;
+      --text-muted: #656d76;
+      --accent: #58a6ff;
+      --accent-dim: #1a3a5c;
+      --green: #3fb950;
+      --green-dim: #1a3524;
+      --amber: #d29922;
+      --amber-dim: #3d2e00;
+      --red: #f85149;
+      --red-dim: #3d1418;
+      --mono: 'SF Mono', 'Cascadia Code', 'JetBrains Mono', 'Fira Code', Menlo, Consolas, monospace;
+      --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--ground);
+      color: var(--text-primary);
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 48px 24px 96px;
+    }
+
+    /* --- Header --- */
+    .page-header {
+      margin-bottom: 56px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+    .page-header h1 {
+      font-family: var(--sans);
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+    .page-header h1 code {
+      font-family: var(--mono);
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 0.95em;
+      background: none;
+      padding: 0;
+    }
+    .page-header .subtitle {
+      font-size: 15px;
+      color: var(--text-secondary);
+      max-width: 680px;
+    }
+
+    /* --- Section headings --- */
+    h2 {
+      font-family: var(--sans);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-subtle);
+      letter-spacing: -0.01em;
+    }
+    h3 {
+      font-family: var(--sans);
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+    }
+
+    section { margin-bottom: 56px; }
+
+    /* --- Command section header --- */
+    .cmd-header {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+    }
+    .cmd-header h2 {
+      border-bottom: none;
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
+    .cmd-name {
+      font-family: var(--mono);
+      color: var(--accent);
+      font-size: 22px;
+      font-weight: 600;
+    }
+    .cmd-source {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text-muted);
+      word-break: break-all;
+    }
+    .cmd-source a { color: var(--text-muted); text-decoration: none; }
+    .cmd-source a:hover { color: var(--accent); text-decoration: underline; }
+
+    .cmd-desc {
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-bottom: 24px;
+      max-width: 800px;
+      line-height: 1.65;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    /* --- Tables --- */
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 24px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-variant-numeric: tabular-nums;
+      font-size: 13.5px;
+    }
+    thead th {
+      background: var(--surface-raised);
+      font-weight: 600;
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-secondary);
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      white-space: nowrap;
+    }
+    tbody td {
+      padding: 8px 14px;
+      border-bottom: 1px solid var(--border-subtle);
+      vertical-align: top;
+      color: var(--text-primary);
+    }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background: var(--surface); }
+
+    td:first-child code,
+    .flag {
+      font-family: var(--mono);
+      font-size: 12.5px;
+      color: var(--green);
+      white-space: nowrap;
+    }
+    .line-num {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text-muted);
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    /* --- Comparison table special --- */
+    .cmp-table td:first-child {
+      font-weight: 600;
+      color: var(--text-secondary);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    .cmp-table .yes {
+      color: var(--green);
+      font-weight: 600;
+    }
+    .cmp-table .no {
+      color: var(--text-muted);
+    }
+    .cmp-table .partial {
+      color: var(--amber);
+    }
+    .cmp-table thead th:not(:first-child) {
+      font-family: var(--mono);
+      color: var(--accent);
+      font-size: 13px;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    /* --- Detail blocks --- */
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 800px) {
+      .detail-grid { grid-template-columns: 1fr; }
+    }
+    .detail-card {
+      background: var(--surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .detail-card h4 {
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .detail-card p {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* --- Decision guide --- */
+    .decision-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .decision-item {
+      background: var(--surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 16px 20px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 16px;
+      align-items: center;
+    }
+    .decision-scenario {
+      font-size: 14px;
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+    .decision-arrow {
+      color: var(--text-muted);
+      font-size: 18px;
+      user-select: none;
+    }
+    .decision-cmd {
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--accent);
+      background: var(--accent-dim);
+      padding: 4px 12px;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+    .decision-cmd.green {
+      color: var(--green);
+      background: var(--green-dim);
+    }
+    .decision-cmd.amber {
+      color: var(--amber);
+      background: var(--amber-dim);
+    }
+
+    /* --- Code blocks --- */
+    pre {
+      background: var(--surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 16px 20px;
+      overflow-x: auto;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+    }
+    pre .comment { color: var(--text-muted); }
+    pre .cmd { color: var(--green); }
+    pre .flag-hl { color: var(--amber); }
+    pre .string { color: #a5d6ff; }
+
+    code {
+      font-family: var(--mono);
+      font-size: 0.9em;
+      background: var(--surface-raised);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--accent);
+    }
+
+    /* --- Related commands --- */
+    .related {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .related-tag {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text-secondary);
+      background: var(--surface);
+      border: 1px solid var(--border-subtle);
+      padding: 3px 10px;
+      border-radius: 4px;
+    }
+
+    /* --- Example section --- */
+    .example-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 700px) {
+      .example-grid { grid-template-columns: 1fr; }
+    }
+    .example-card {
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+    }
+    .example-card .example-label {
+      background: var(--surface-raised);
+      padding: 10px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .example-card pre {
+      margin: 0;
+      border: none;
+      border-radius: 0;
+    }
+    .example-card.teardown .example-label {
+      color: var(--red);
+    }
+
+    /* --- TOC --- */
+    .toc {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+    .toc a {
+      font-size: 13px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      background: var(--surface);
+      border: 1px solid var(--border-subtle);
+      padding: 5px 14px;
+      border-radius: 6px;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .toc a:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* description col sizing */
+    .opts-table .col-flag { width: 220px; min-width: 180px; }
+    .opts-table .col-desc { }
+    .opts-table .col-line { width: 56px; min-width: 56px; }
+
+    /* Top Left Back Link */
+    .back-nav {
+      margin-bottom: 24px;
+    }
+    .back-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .back-link:hover {
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+  <!-- Back Link -->
+  <div class="back-nav">
+    <a href="/index.html" class="back-link">← กลับหน้าหลักโรงเรียน</a>
+  </div>
+
+  <!-- Header -->
+  <header class="page-header">
+    <h1><code>maw new</code> vs <code>wake</code> vs <code>work</code></h1>
+    <p class="subtitle">
+      Three commands for creating tmux workspaces in the maw-rs CLI. They overlap in surface but differ in intent: <code>new</code> scaffolds raw sessions, <code>wake</code> resolves oracles to repos and launches engines, <code>work</code> adds git worktree isolation on top. This reference covers every flag, compares capabilities, and provides copy-paste recipes.
+    </p>
+  </header>
+
+  <!-- TOC -->
+  <nav class="toc">
+    <a href="#comparison">Comparison</a>
+    <a href="#decision">Which to use</a>
+    <a href="#maw-new">maw new</a>
+    <a href="#maw-wake">maw wake</a>
+    <a href="#maw-work">maw work</a>
+    <a href="#examples">Recipes</a>
+  </nav>
+
+  <!-- ============================================================ -->
+  <!-- COMPARISON TABLE -->
+  <!-- ============================================================ -->
+  <section id="comparison">
+    <h2>Side-by-Side Comparison</h2>
+    <div class="table-wrap">
+      <table class="cmp-table">
+        <thead>
+          <tr>
+            <th>Capability</th>
+            <th>maw new</th>
+            <th>maw wake</th>
+            <th>maw work</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Primary purpose</td>
+            <td>Scaffold a tmux session or split pane</td>
+            <td>Resolve an oracle name, launch engine</td>
+            <td>Resolve a repo, optional worktree, launch engine</td>
+          </tr>
+          <tr>
+            <td>Repo resolution</td>
+            <td class="no">None (uses cwd or --path)</td>
+            <td class="yes">ghq roots + fleet entries + fuzzy match</td>
+            <td class="yes">ghq + path + URL + "."</td>
+          </tr>
+          <tr>
+            <td>Oracle name resolution</td>
+            <td class="no">No</td>
+            <td class="yes">Yes (positional arg)</td>
+            <td class="no">No</td>
+          </tr>
+          <tr>
+            <td>Git worktree creation</td>
+            <td class="no">No</td>
+            <td class="partial">Naming only (--wt slug for window name)</td>
+            <td class="yes">Full (--wt creates agents/&lt;slug&gt; worktrees)</td>
+          </tr>
+          <tr>
+            <td><code>--engine / -e</code> flag</td>
+            <td class="no">No (--claude or --cmd only)</td>
+            <td class="yes">Yes, with config commands map lookup</td>
+            <td class="yes">Yes, with config commands map lookup</td>
+          </tr>
+          <tr>
+            <td>Engine default</td>
+            <td>None (bare shell unless --cmd/--claude)</td>
+            <td><code>codex</code></td>
+            <td><code>claude</code></td>
+          </tr>
+          <tr>
+            <td><code>--split</code> pane mode</td>
+            <td class="yes">Yes (horizontal/vertical)</td>
+            <td class="partial">Flag exists (boolean)</td>
+            <td class="no">No</td>
+          </tr>
+          <tr>
+            <td>Tmux session creation</td>
+            <td class="yes">Yes (new-session with -d)</td>
+            <td class="yes">Yes (new-session via WakeTmuxNative)</td>
+            <td class="partial">Only if outside tmux; inside creates window</td>
+          </tr>
+          <tr>
+            <td>Collision avoidance</td>
+            <td class="yes">Auto-increment suffix (up to 99)</td>
+            <td class="partial">Deterministic hash slot (10-89)</td>
+            <td class="partial">Auto-increment worktree numbering</td>
+          </tr>
+          <tr>
+            <td>Fleet auto-registration</td>
+            <td class="yes">Yes</td>
+            <td class="yes">Yes (fleet_registry_upsert_session)</td>
+            <td class="yes">Yes (oracle repos)</td>
+          </tr>
+          <tr>
+            <td>Federation / remote</td>
+            <td class="no">No</td>
+            <td class="yes">Yes (--peer, HTTP wake via run_wake_async)</td>
+            <td class="no">No</td>
+          </tr>
+          <tr>
+            <td><code>--dry-run</code></td>
+            <td class="yes">Yes</td>
+            <td class="yes">Yes</td>
+            <td class="no">No</td>
+          </tr>
+          <tr>
+            <td><code>--attach</code> / <code>--no-attach</code></td>
+            <td class="yes">Yes (default: interactive TTY)</td>
+            <td class="yes">Yes (default: attach)</td>
+            <td class="no">No explicit flag</td>
+          </tr>
+          <tr>
+            <td>JSON output</td>
+            <td class="yes">--print / --json</td>
+            <td class="no">No</td>
+            <td class="no">No</td>
+          </tr>
+          <tr>
+            <td>Launch context stored</td>
+            <td class="yes">tmux session options (@maw_new_*)</td>
+            <td class="yes">Fleet registry JSON</td>
+            <td class="yes">Fleet registry (oracle repos)</td>
+          </tr>
+          <tr>
+            <td>Worktree layout modes</td>
+            <td class="no">N/A</td>
+            <td class="partial">--layout nested|legacy (naming only)</td>
+            <td class="yes">--layout nested|legacy (directory structure)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- DECISION GUIDE -->
+  <!-- ============================================================ -->
+  <section id="decision">
+    <h2>Which Command to Use</h2>
+    <ul class="decision-list">
+      <li class="decision-item">
+        <span class="decision-scenario">You need a raw tmux session or split pane with a shell or custom command</span>
+        <span class="decision-arrow">&rarr;</span>
+        <span class="decision-cmd">maw new</span>
+      </li>
+      <li class="decision-item">
+        <span class="decision-scenario">You want to launch Claude in a new session with env vars wired up</span>
+        <span class="decision-arrow">&rarr;</span>
+        <span class="decision-cmd">maw new --claude</span>
+      </li>
+      <li class="decision-item">
+        <span class="decision-scenario">You know the oracle name and want to wake it with the right engine</span>
+        <span class="decision-arrow">&rarr;</span>
+        <span class="decision-cmd amber">maw wake</span>
+      </li>
+      <li class="decision-item">
+        <span class="decision-scenario">You need to wake an oracle on a remote fleet peer</span>
+        <span class="decision-arrow">&rarr;</span>
+        <span class="decision-cmd amber">maw wake --peer</span>
+      </li>
+      <li class="decision-item">
+        <span class="decision-scenario">You want isolated agent work with a git worktree per coder</span>
+        <span class="decision-arrow">&rarr;</span>
+        <span class="decision-cmd green">maw work --wt</span>
+      </li>
+      <li class="decision-item">
+        <span class="decision-scenario">You want to spawn N codex coders on separate branches</span>
+        <span class="decision-arrow">&rarr;</span>
+        <span class="decision-cmd green">maw work . task --wt -e codex</span>
+      </li>
+      <li class="decision-item">
+        <span class="decision-scenario">You have a GitHub URL and want to clone + work on it</span>
+        <span class="decision-arrow">&rarr;</span>
+        <span class="decision-cmd green">maw work &lt;url&gt;</span>
+      </li>
+      <li class="decision-item">
+        <span class="decision-scenario">You need a split pane in the current window</span>
+        <span class="decision-arrow">&rarr;</span>
+        <span class="decision-cmd">maw new --split</span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- MAW NEW -->
+  <!-- ============================================================ -->
+  <section id="maw-new">
+    <div class="cmd-header">
+      <h2><span class="cmd-name">maw new</span></h2>
+    </div>
+    <p class="cmd-source">
+      <a href="file:///Users/admin/maw-workspace/crates/maw-cli/src/core_impl/workspace_scaffold_commands.rs">crates/maw-cli/src/core_impl/workspace_scaffold_commands.rs</a> &mdash; usage L14, entry L560, args L577
+    </p>
+    <p class="cmd-desc">
+      Creates a new tmux workspace session (or split pane) with an optional startup command. Auto-names from the working directory, avoids collisions by incrementing a suffix, auto-registers in the fleet, and stores launch context as tmux session options for idempotent re-creation.
+    </p>
+
+    <h3>Options</h3>
+    <div class="table-wrap">
+      <table class="opts-table">
+        <thead>
+          <tr><th class="col-flag">Flag</th><th class="col-desc">Description</th><th class="col-line">Line</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code class="flag">--help / -h / help</code></td><td>Show usage help and exit</td><td class="line-num">596</td></tr>
+          <tr><td><code class="flag">--attach / -a</code></td><td>Attach to the session after creating it</td><td class="line-num">598</td></tr>
+          <tr><td><code class="flag">--no-attach</code></td><td>Do not attach to the session after creating it</td><td class="line-num">599</td></tr>
+          <tr><td><code class="flag">--path / -p &lt;dir&gt;</code></td><td>Set the working directory for the new session (defaults to cwd)</td><td class="line-num">600</td></tr>
+          <tr><td><code class="flag">--window &lt;name&gt;</code></td><td>Set the initial window name (defaults to "lead"); session mode only, not --split</td><td class="line-num">606</td></tr>
+          <tr><td><code class="flag">--cmd / -c &lt;cmd&gt;</code></td><td>Startup command to run in the new pane/session (mutually exclusive with --claude)</td><td class="line-num">609</td></tr>
+          <tr><td><code class="flag">--claude</code></td><td>Launch claude with CLAUDECODE=1 and CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1 env vars; auto-resolves parent session ID</td><td class="line-num">614</td></tr>
+          <tr><td><code class="flag">--shell</code></td><td>No-op flag (accepted but ignored for compatibility)</td><td class="line-num">615</td></tr>
+          <tr><td><code class="flag">--split</code></td><td>Split the current tmux window instead of creating a new session</td><td class="line-num">616</td></tr>
+          <tr><td><code class="flag">--right / --horizontal</code></td><td>Split direction: horizontal (right edge); requires --split</td><td class="line-num">617</td></tr>
+          <tr><td><code class="flag">--bottom / --vertical</code></td><td>Split direction: vertical (bottom edge, default); requires --split</td><td class="line-num">618</td></tr>
+          <tr><td><code class="flag">--print / --json</code></td><td>Machine-readable JSON output with session, window, pane_id, cwd, command, reused fields</td><td class="line-num">619</td></tr>
+          <tr><td><code class="flag">--dry-run</code></td><td>Show what would be created without touching tmux state</td><td class="line-num">620</td></tr>
+          <tr><td><code class="flag">--no-fleet</code></td><td>Skip automatic fleet session registration</td><td class="line-num">621</td></tr>
+          <tr><td><code class="flag">--parent / --parent-session-id</code></td><td>Explicit parent session ID for MAW_PARENT_SESSION_ID env var (used with --claude)</td><td class="line-num">622</td></tr>
+          <tr><td><code class="flag">--session-id</code></td><td>Explicit session ID for MAW_SESSION_ID env var (used with --claude)</td><td class="line-num">628</td></tr>
+          <tr><td><code class="flag">[session-name]</code></td><td>Positional: explicit session name; if omitted, auto-generated from cwd directory name and/or command slug</td><td class="line-num">639</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="detail-grid">
+      <div class="detail-card">
+        <h4>Worktree Support</h4>
+        <p>Not supported. <code>maw new</code> does not create or manage git worktrees.</p>
+      </div>
+      <div class="detail-card">
+        <h4>Engine Support</h4>
+        <p>No <code>--engine</code> flag. When <code>--claude</code> is used, calls <code>workon_build_command_in_dir</code> to resolve the configured engine from .maw config. Falls back to bare <code>claude</code> if the resolved command does not look like a claude command.</p>
+      </div>
+      <div class="detail-card">
+        <h4>Tmux Interaction</h4>
+        <p><strong>Session mode:</strong> checks <code>has-session</code>, creates detached via <code>new-session -d -s name -n window -c cwd</code>. Stores launch context as <code>@maw_new_cwd</code> / <code>@maw_new_command</code> / <code>@maw_new_window</code> session options. Collision: auto-increments suffix up to 99.<br><strong>Split mode:</strong> calls <code>split-window -f -h/-v</code>, sets pane title via <code>select-pane -T</code>.</p>
+      </div>
+    </div>
+
+    <h3>Related Commands</h3>
+    <div class="related">
+      <span class="related-tag">maw work</span>
+      <span class="related-tag">maw scaffold</span>
+      <span class="related-tag">maw promote</span>
+      <span class="related-tag">maw a / maw attach</span>
+      <span class="related-tag">maw team bring</span>
+      <span class="related-tag">maw view</span>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- MAW WAKE -->
+  <!-- ============================================================ -->
+  <section id="maw-wake">
+    <div class="cmd-header">
+      <h2><span class="cmd-name">maw wake</span></h2>
+    </div>
+    <p class="cmd-source">
+      <a href="file:///Users/admin/maw-workspace/crates/maw-cli/src/core_impl/wake.rs">crates/maw-cli/src/core_impl/wake.rs</a> &mdash; usage L294, entry L121, args L162
+    </p>
+    <p class="cmd-desc">
+      Resolves an oracle name to a repo path (via ghq roots and fleet entries, with fuzzy matching), creates or reuses a tmux session/window at that repo, sends an engine launch command into the pane, and auto-registers in the fleet registry. For remote peers (containing ":" or <code>--peer</code>), delegates to <code>run_wake_async</code> which sends the request over HTTP to a remote maw serve node.
+    </p>
+
+    <h3>Options</h3>
+    <div class="table-wrap">
+      <table class="opts-table">
+        <thead>
+          <tr><th class="col-flag">Flag</th><th class="col-desc">Description</th><th class="col-line">Line</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code class="flag">--task</code></td><td>Task slug; derives tmux window name as <code>oracle-&lt;task&gt;</code></td><td class="line-num">190</td></tr>
+          <tr><td><code class="flag">--wt</code></td><td>Worktree slug; derives tmux window name. Takes priority over --task for naming</td><td class="line-num">191</td></tr>
+          <tr><td><code class="flag">--prompt</code></td><td>Prompt text passed as an argument to the engine command</td><td class="line-num">192</td></tr>
+          <tr><td><code class="flag">--repo</code></td><td>Explicit org/repo to resolve via ghq-based repo resolution</td><td class="line-num">193</td></tr>
+          <tr><td><code class="flag">--issue</code></td><td>Issue number (digits and #); used by downstream peer/federation wake</td><td class="line-num">194</td></tr>
+          <tr><td><code class="flag">--pr</code></td><td>PR number (digits and #); used by downstream peer/federation wake</td><td class="line-num">195</td></tr>
+          <tr><td><code class="flag">--incubate</code></td><td>Incubate a repo (org/repo slug); resolved via ghq like --repo</td><td class="line-num">196</td></tr>
+          <tr><td><code class="flag">--parent / --session</code></td><td>Parent tmux session name to attach the window to</td><td class="line-num">197</td></tr>
+          <tr><td><code class="flag">--peer</code></td><td>Target peer node for federation/remote wake (triggers HTTP wake path)</td><td class="line-num">198</td></tr>
+          <tr><td><code class="flag">--from</code></td><td>Source peer node; stored alongside --peer for federation context</td><td class="line-num">198</td></tr>
+          <tr><td><code class="flag">--layout</code></td><td>Tmux layout mode: "nested" or "legacy" (validated to only those two values)</td><td class="line-num">199</td></tr>
+          <tr><td><code class="flag">--snapshot</code></td><td>Snapshot ID for --from-snapshot workflow</td><td class="line-num">200</td></tr>
+          <tr><td><code class="flag">-e / --engine</code></td><td>Engine to launch (e.g. codex, claude, omx-1). Resolved through .maw config commands map. Defaults to config default or "codex"</td><td class="line-num">201</td></tr>
+          <tr><td><code class="flag">--name</code></td><td>Override the oracle name derived from the target (for tmux naming)</td><td class="line-num">202</td></tr>
+          <tr><td><code class="flag">--repo-path</code></td><td>Explicit filesystem path, bypassing ghq/fleet resolution (used by "team up" for worktree paths)</td><td class="line-num">203</td></tr>
+          <tr><td><code class="flag">--all</code></td><td>Show all-plan output for all live tmux sessions</td><td class="line-num">240</td></tr>
+          <tr><td><code class="flag">--all-local</code></td><td>Restrict --all to local sessions only</td><td class="line-num">242</td></tr>
+          <tr><td><code class="flag">--attach</code></td><td>Select/focus the tmux window after wake (default: true)</td><td class="line-num">243</td></tr>
+          <tr><td><code class="flag">--no-attach</code></td><td>Do not select/focus the tmux window after wake</td><td class="line-num">244</td></tr>
+          <tr><td><code class="flag">--dry-run</code></td><td>Show what would happen without creating/modifying tmux sessions</td><td class="line-num">245</td></tr>
+          <tr><td><code class="flag">--fresh</code></td><td>Force fresh session creation</td><td class="line-num">246</td></tr>
+          <tr><td><code class="flag">--from-snapshot</code></td><td>Wake from a snapshot (used with --snapshot)</td><td class="line-num">247</td></tr>
+          <tr><td><code class="flag">--kill</code></td><td>Kill mode</td><td class="line-num">248</td></tr>
+          <tr><td><code class="flag">--list</code></td><td>List live tmux sessions for the target oracle</td><td class="line-num">249</td></tr>
+          <tr><td><code class="flag">--main</code></td><td>Main window mode; implies --solo</td><td class="line-num">250</td></tr>
+          <tr><td><code class="flag">--new</code></td><td>Force creation of a new tmux window even if one with the same name exists</td><td class="line-num">251</td></tr>
+          <tr><td><code class="flag">--pick</code></td><td>Pick mode</td><td class="line-num">252</td></tr>
+          <tr><td><code class="flag">--resume</code></td><td>Resume mode; forces engine to "codex" and appends "resume" to the command</td><td class="line-num">253</td></tr>
+          <tr><td><code class="flag">--solo</code></td><td>Solo mode</td><td class="line-num">254</td></tr>
+          <tr><td><code class="flag">--split</code></td><td>Split mode</td><td class="line-num">255</td></tr>
+          <tr><td><code class="flag">--bud</code></td><td>Bud mode for oracle budding</td><td class="line-num">256</td></tr>
+          <tr><td><code class="flag">--channels</code></td><td>Appends <code>--channels plugin:discord@claude-plugins-official</code> to the engine command</td><td class="line-num">257</td></tr>
+          <tr><td><code class="flag">--wait</code></td><td>Wait mode</td><td class="line-num">258</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="detail-grid">
+      <div class="detail-card">
+        <h4>Worktree Support</h4>
+        <p><code>--wt</code> takes a slug used to derive the tmux window name as <code>{oracle}-{wt_slug}</code>. Takes priority over <code>--task</code> for naming. The slug is sanitized to alphanumeric + hyphens. Does <strong>not</strong> create git worktrees itself &mdash; that is handled upstream by callers like <code>team up</code>.</p>
+      </div>
+      <div class="detail-card">
+        <h4>Engine Support</h4>
+        <p>Resolution order: (1) <code>--engine</code> value if set. (2) <code>--resume</code> forces "codex". (3) Merged .maw config <code>commands.default</code>. (4) Fallback: "codex". Engine name is resolved through <code>wake_resolve_engine_command()</code> which expands custom engines from the config commands map (e.g. "omx-1" becomes its full shell command).</p>
+      </div>
+      <div class="detail-card">
+        <h4>Tmux Interaction</h4>
+        <p>Uses <code>WakeTmuxNative</code> trait backed by <code>TmuxClient::local()</code>. Lists existing sessions, resolves session name (--parent > existing match > generated <code>{slot}-{oracle}</code> where slot is a deterministic hash 10-89). Creates session/window as needed, sends engine command via <code>send_text</code> as <code>MAW_SESSION_WINDOW={w} cd {cwd} && {engine}</code>. Selects window on attach.</p>
+      </div>
+    </div>
+
+    <h3>Related Commands</h3>
+    <div class="related">
+      <span class="related-tag">maw workon</span>
+      <span class="related-tag">maw fleet</span>
+      <span class="related-tag">maw team up</span>
+      <span class="related-tag">federation: run_wake_async</span>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- MAW WORK -->
+  <!-- ============================================================ -->
+  <section id="maw-work">
+    <div class="cmd-header">
+      <h2><span class="cmd-name">maw work</span></h2>
+    </div>
+    <p class="cmd-source">
+      <a href="file:///Users/admin/maw-workspace/crates/maw-cli/src/core_impl/workspace_scaffold_commands.rs">crates/maw-cli/src/core_impl/workspace_scaffold_commands.rs</a> (dispatch L11, entry L367) +
+      <a href="file:///Users/admin/maw-workspace/crates/maw-cli/src/core_impl/workon.rs">crates/maw-cli/src/core_impl/workon.rs</a> (implementation, args L80)
+    </p>
+    <p class="cmd-desc">
+      Resolves a repo (via ghq, path, URL, or "."), optionally creates or reuses a git worktree for isolated agent work, then creates or reuses a tmux window (or session if outside tmux) and sends the configured engine command into it. Thin wrapper that delegates entirely to <code>run_workon_command</code>.
+    </p>
+
+    <h3>Options</h3>
+    <div class="table-wrap">
+      <table class="opts-table">
+        <thead>
+          <tr><th class="col-flag">Flag</th><th class="col-desc">Description</th><th class="col-line">Line</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code class="flag">&lt;repo|.|path|url&gt;</code></td><td>Positional: repo name (ghq search), ".", absolute path, or GitHub URL</td><td class="line-num">151</td></tr>
+          <tr><td><code class="flag">[task]</code></td><td>Positional: optional task slug; triggers worktree creation with <code>agents/&lt;task&gt;</code> branch</td><td class="line-num">154</td></tr>
+          <tr><td><code class="flag">--wt [slug]</code></td><td>Request a git worktree. If slug given, uses it; if bare --wt, auto-derives slug from --name, --engine, or defaults to "codex"</td><td class="line-num">100</td></tr>
+          <tr><td><code class="flag">--fresh / --new</code></td><td>Force creation of a new worktree even if a reusable one exists; also forces a new tmux window</td><td class="line-num">116</td></tr>
+          <tr><td><code class="flag">--name &lt;stable&gt;</code></td><td>Stable name for the worktree slug (persists across fresh runs); combined with --wt slug if both given</td><td class="line-num">121</td></tr>
+          <tr><td><code class="flag">-e / --engine &lt;engine&gt;</code></td><td>Engine/command to launch. Looked up in .maw config commands map; if not found, used as raw command string</td><td class="line-num">132</td></tr>
+          <tr><td><code class="flag">--layout nested|legacy</code></td><td>Worktree directory layout: "nested" puts worktrees in <code>repo/agents/&lt;name&gt;</code> (default), "legacy" puts them as sibling dirs <code>repo.wt-&lt;name&gt;</code></td><td class="line-num">91</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="detail-grid">
+      <div class="detail-card">
+        <h4>Worktree Support</h4>
+        <p>Full support via <code>--wt [slug]</code> or positional <code>[task]</code>. Creates git worktrees under <code>repo/agents/&lt;slug&gt;</code> (nested, default) or as sibling dirs (legacy). Branch: <code>agents/&lt;slug&gt;</code>. Reuses existing worktrees by fuzzy match unless <code>--fresh</code>. <code>--name</code> provides a stable slug prefix. Numbering (<code>1-feat</code>, <code>2-feat</code>) auto-increments on collision.</p>
+      </div>
+      <div class="detail-card">
+        <h4>Engine Support</h4>
+        <p>Via <code>-e/--engine</code>. Looks up the engine name in .maw config commands map (<code>merged_config_value_in_dir</code>). If found, uses that command string. If not, uses the raw engine string. Without <code>-e</code>: looks up window_name in commands map, falls back to <code>commands.default</code>, then falls back to "claude".</p>
+      </div>
+      <div class="detail-card">
+        <h4>Tmux Interaction</h4>
+        <p><strong>Inside tmux:</strong> detects current session via <code>display-message</code>, creates <code>new-window</code> or reuses existing by name. <strong>Outside tmux:</strong> looks for existing session (exact match via <code>has-session</code>, then numbered fleet stem match like <code>188-reponame</code>), creates with <code>new-session -d</code> if none found. Sends engine command via <code>send-keys</code>.</p>
+      </div>
+    </div>
+
+    <h3>Related Commands</h3>
+    <div class="related">
+      <span class="related-tag">maw workon</span>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- EXAMPLES -->
+  <!-- ============================================================ -->
+  <section id="examples">
+    <h2>Copy-Paste Recipes: Codex Team Management</h2>
+
+    <div class="example-grid">
+
+      <div class="example-card">
+        <div class="example-label">Spawn 1 coder (worktree-isolated)</div>
+        <pre><span class="comment"># Creates agents/fix-auth worktree + tmux window + launches codex</span>
+<span class="cmd">maw work</span> . fix-auth <span class="flag-hl">--wt</span> <span class="flag-hl">-e</span> codex</pre>
+      </div>
+
+      <div class="example-card">
+        <div class="example-label">Spawn 1 coder (session, no worktree)</div>
+        <pre><span class="comment"># Creates a new tmux session with codex in the current dir</span>
+<span class="cmd">maw new</span> coder-1 <span class="flag-hl">-c</span> <span class="string">"codex"</span></pre>
+      </div>
+
+      <div class="example-card">
+        <div class="example-label">Spawn 5 coders (worktree loop)</div>
+        <pre><span class="comment"># Each gets its own agents/coder-N worktree + branch</span>
+<span class="cmd">for</span> i <span class="cmd">in</span> 1 2 3 4 5; <span class="cmd">do</span>
+  maw work . coder-$i <span class="flag-hl">--wt</span> <span class="flag-hl">--fresh</span> <span class="flag-hl">-e</span> codex
+<span class="cmd">done</span></pre>
+      </div>
+
+      <div class="example-card">
+        <div class="example-label">Spawn 5 coders (wake, oracle-based)</div>
+        <pre><span class="comment"># Each wakes the oracle with a task-derived window name</span>
+<span class="cmd">for</span> i <span class="cmd">in</span> 1 2 3 4 5; <span class="cmd">do</span>
+  maw wake my-oracle <span class="flag-hl">--task</span> coder-$i <span class="flag-hl">-e</span> codex <span class="flag-hl">--new</span>
+<span class="cmd">done</span></pre>
+      </div>
+
+      <div class="example-card teardown">
+        <div class="example-label">Teardown 1 coder (kill tmux window)</div>
+        <pre><span class="comment"># Kill a specific tmux window by name</span>
+<span class="cmd">tmux</span> kill-window <span class="flag-hl">-t</span> <span class="string">"coder-1"</span>
+
+<span class="comment"># Or kill via wake --kill (if supported by your oracle)</span>
+<span class="cmd">maw wake</span> my-oracle <span class="flag-hl">--task</span> coder-1 <span class="flag-hl">--kill</span></pre>
+      </div>
+
+      <div class="example-card teardown">
+        <div class="example-label">Teardown all coders</div>
+        <pre><span class="comment"># Kill all coder windows matching the pattern</span>
+<span class="cmd">for</span> i <span class="cmd">in</span> 1 2 3 4 5; <span class="cmd">do</span>
+  tmux kill-window -t <span class="string">"coder-$i"</span> 2>/dev/null
+<span class="cmd">done</span>
+
+<span class="comment"># Clean up worktrees (if created with maw work --wt)</span>
+<span class="cmd">for</span> i <span class="cmd">in</span> 1 2 3 4 5; <span class="cmd">do</span>
+  git worktree remove agents/coder-$i <span class="flag-hl">--force</span> 2>/dev/null
+<span class="cmd">done</span>
+
+<span class="comment"># Or kill the entire session</span>
+<span class="cmd">tmux</span> kill-session <span class="flag-hl">-t</span> <span class="string">"my-session"</span></pre>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>

@@ -12,7 +12,9 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
-        export: resolve(__dirname, 'student-export.html')
+        export: resolve(__dirname, 'student-export.html'),
+        commands: resolve(__dirname, 'commands.html'),
+        oldevill: resolve(__dirname, 'oldevill-reference.html')
       }
     }
   }
